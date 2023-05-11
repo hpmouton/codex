@@ -5,7 +5,7 @@ const Home = () => {
     <h1 className="head_text text-center">
         Discover & Share
         <br className="max-md:hidden" />
-        <span className="orange_gradient text-center">AI-Powered Prompts</span>
+        <span className="blue_gradient text-center">AI-Powered Prompts</span>
         <p className="desc text-center">Codex: The Ultimate AI Solution - Explore our AI products and discover how they can transform your business.</p>
 
         <Feed />
