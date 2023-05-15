@@ -14,6 +14,8 @@ const MyProfile = () => {
     const {data: session } = useSession();
 
     const [posts, setPosts] = useState([]);
+    const router = new useRouter();
+
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -22,6 +24,7 @@ const MyProfile = () => {
     
           setPosts(data);
         }
+
         
         if(session?.user.id)
         fetchPosts();
@@ -30,18 +33,18 @@ const MyProfile = () => {
       }, [])
     
 
-    const handleEdit = ()  => {
-
+    const handleEdit = (post)  => {
+      router.push(`/update-post?id=${post._id}`)
     }
 
-    const handleDelete = () => {
+    const handleDelete = (post) => {
 
     }
   return (
    <Profile 
    name="My"
    desc="Welcome to your profile"
-   data={[]}
+   data={posts}
    handleEdit={handleEdit}
    handleDelete={handleDelete}
 
