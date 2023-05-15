@@ -49,7 +49,7 @@ export const PATCH = async (request, {params}) => {
 export const DELETE = async (request, {params}) => {
     try {
         await connectToDB();
-        await post.findByIdAndRemove(params.id);
+        await Post.findByIdAndRemove(params.id);
         return new Response("Post Deleted Successfully",{status: 200})
 
 
