@@ -18,20 +18,50 @@ const PromptCardList = ({data, handleTagClick}) => {
 }
 const Feed = () => {
 
-  const [searchText, setSearchText] = useState('');
   const [posts, setPosts] = useState([]);
 
-  const handleSearchChange= (e) => {
+  //Search function
+  const [searchText, setSearchText] = useState("");
+  const [searchTimeout, setSearchTimeout] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
 
+  const filterPosts = (searchtext) => {
+    const regex = new RegExp(searchtext, "i");
+    //search
+    return posts.filter(
+      (item) => regex.test(item.creator.username) ||
+      regex.test(item.tag) ||
+      regex.test(item.post)
+    )
+  }
+  const handleSearchChange= (e) => {
+    clearTimeout(searchTimeout);
+    setSearchText(e.target.value)
+
+    //debounce
+    setSearchTimeout(
+      setTimeout(() => {
+        const searchResult = filterPosts(e.target.value);
+        setSearchResults(searchResult);
+      })
+    )
+  }
+
+  const handleTagClick = (tagName) => {
+    setSearchText(tagName);
+
+    const searchResult = filterPosts(tagName);
+    setSearchResults(searchResult);
+  }
+  const fetchPosts = async () => {
+    const response = await fetch('/api/post');
+    const data = await response.json();
+
+    setPosts(data);
   }
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      const response = await fetch('/api/post');
-      const data = await response.json();
-
-      setPosts(data);
-    }
+   
     
     fetchPosts();
 
@@ -50,11 +80,18 @@ const Feed = () => {
     className='search_input peer'
     />
   </form>
-
+{searchText ? (
+  <PromptCardList 
+  data={searchResults}
+  handleTagClick={handleTagClick}
+  />
+):(
   <PromptCardList 
   data={posts}
-  handleTagClick={() => {}}
+  handleTagClick={handleTagClick}
   />
+)}
+  
 </section>
     )
 }
